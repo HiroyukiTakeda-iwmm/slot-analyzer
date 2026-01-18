@@ -60,7 +60,7 @@ export default function ImportScreen() {
           },
         ]
       );
-    } catch (error) {
+    } catch {
       Alert.alert('エラー', 'インポートに失敗しました。');
     }
   };

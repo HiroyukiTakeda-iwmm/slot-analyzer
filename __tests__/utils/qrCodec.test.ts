@@ -5,6 +5,7 @@ import {
   stringToQRData,
   generateUUID,
   getRecommendedECLevel,
+  estimateQRDataSize,
 } from '../../utils/qrCodec';
 import { MachineData, QRMachineData, DEFAULT_SETTINGS } from '../../types';
 
@@ -115,6 +116,16 @@ describe('qrCodec utility functions', () => {
       ],
     };
 
+    const customSettingsQRData: QRMachineData = {
+      v: 1,
+      n: 'カスタム設定機種',
+      t: 'A',
+      s: ['L', 'H'], // カスタム設定（DEFAULT_SETTINGSと異なる）
+      r: [
+        { n: 'ぶどう', p: [7.0, 6.0] },
+      ],
+    };
+
     it('decodes QR data to machine data', () => {
       const result = decodeMachineData(qrData);
 
@@ -158,6 +169,17 @@ describe('qrCodec utility functions', () => {
       const artQRData = { ...qrData, t: 'ART' };
       const result = decodeMachineData(artQRData);
       expect(result.type).toBe('ART');
+    });
+
+    it('handles custom settings (non-DEFAULT_SETTINGS)', () => {
+      const result = decodeMachineData(customSettingsQRData);
+
+      expect(result.name).toBe('カスタム設定機種');
+      expect(result.settings.length).toBe(2);
+      expect(result.settings[0].id).toBe('L');
+      expect(result.settings[0].name).toBe('設定L');
+      expect(result.settings[1].id).toBe('H');
+      expect(result.settings[1].name).toBe('設定H');
     });
   });
 
@@ -250,6 +272,21 @@ describe('qrCodec utility functions', () => {
       const uuids = Array.from({ length: 100 }, () => generateUUID());
       const uniqueUUIDs = new Set(uuids);
       expect(uniqueUUIDs.size).toBe(100);
+    });
+  });
+
+  describe('estimateQRDataSize', () => {
+    it('returns size in bytes', () => {
+      const qrData: QRMachineData = {
+        v: 1,
+        n: 'テスト',
+        t: 'A',
+        s: ['1', '2'],
+        r: [{ n: 'ぶどう', p: [6.49, 6.49] }],
+      };
+      const size = estimateQRDataSize(qrData);
+      expect(size).toBeGreaterThan(0);
+      expect(typeof size).toBe('number');
     });
   });
 

@@ -17,6 +17,59 @@ describe('machineStore', () => {
     resetStore();
   });
 
+  describe('initialize', () => {
+    it('adds preset machines when store is empty', async () => {
+      const { initialize } = useMachineStore.getState();
+
+      await act(async () => {
+        await initialize();
+      });
+
+      const state = useMachineStore.getState();
+      expect(state.isInitialized).toBe(true);
+      expect(state.isLoading).toBe(false);
+      expect(state.machines.length).toBeGreaterThan(0);
+    });
+
+    it('does not add presets when already initialized', async () => {
+      const { initialize } = useMachineStore.getState();
+
+      await act(async () => {
+        await initialize();
+      });
+
+      const machineCount = useMachineStore.getState().machines.length;
+
+      await act(async () => {
+        await initialize();
+      });
+
+      expect(useMachineStore.getState().machines.length).toBe(machineCount);
+    });
+
+    it('does not duplicate presets when they already exist', async () => {
+      // First initialize to add presets
+      const { initialize } = useMachineStore.getState();
+
+      await act(async () => {
+        await initialize();
+      });
+
+      // Reset initialized flag but keep machines
+      useMachineStore.setState({ isInitialized: false });
+
+      await act(async () => {
+        await initialize();
+      });
+
+      const state = useMachineStore.getState();
+      // Should not have duplicate machines
+      const machineNames = state.machines.map((m) => m.name);
+      const uniqueNames = [...new Set(machineNames)];
+      expect(machineNames.length).toBe(uniqueNames.length);
+    });
+  });
+
   const testMachineInput = {
     name: 'テスト機種',
     type: 'A-type' as const,

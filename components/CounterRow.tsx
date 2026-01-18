@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable } from 'react-native';
-import { Text, useTheme, IconButton } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { Role, Setting } from '../types';
 import {
   formatProbability,

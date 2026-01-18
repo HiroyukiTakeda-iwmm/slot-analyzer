@@ -9,7 +9,7 @@ import {
 } from 'react-native-paper';
 import { useSessionStore, useMachineStore } from '../../stores';
 import { CountSession } from '../../types';
-import { formatProbability, generateSettingSummary } from '../../utils/binomial';
+import { generateSettingSummary } from '../../utils/binomial';
 
 export default function HistoryScreen() {
   const theme = useTheme();

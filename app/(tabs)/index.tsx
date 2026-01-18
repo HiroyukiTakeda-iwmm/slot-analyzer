@@ -21,11 +21,7 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useMachineStore, useSessionStore, useSettingsStore } from '../../stores';
 import { MachineData } from '../../types';
-import {
-  formatProbability,
-  calculateCurrentProbability,
-  generateSettingSummary,
-} from '../../utils/binomial';
+import { generateSettingSummary } from '../../utils/binomial';
 import SettingChart from '../../components/SettingChart';
 import CounterRow from '../../components/CounterRow';
 
@@ -65,6 +61,7 @@ export default function CounterScreen() {
     if (selectedMachine && currentSession) {
       updateResults(selectedMachine);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSession?.counts, currentSession?.totalGames, selectedMachine, updateResults]);
 
   const handleMachineSelect = useCallback(

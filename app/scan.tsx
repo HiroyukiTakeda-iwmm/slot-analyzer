@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { Text, Button, useTheme, ActivityIndicator, Card } from 'react-native-paper';
 import { CameraView, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
@@ -75,7 +75,7 @@ export default function ScanScreen() {
             },
           ]
         );
-      } catch (error) {
+      } catch {
         Alert.alert('エラー', 'QRコードの処理中にエラーが発生しました', [
           {
             text: '再スキャン',

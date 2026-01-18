@@ -233,5 +233,16 @@ describe('binomial utility functions', () => {
       expect(result.label).toBe('判別中');
       expect(result.color).toBe('#2196F3');
     });
+
+    it('returns 低設定寄り when low settings >= 50% but < 70%', () => {
+      const results: SettingProbability[] = [
+        { settingId: '1', settingName: '設定1', probability: 0.3, likelihood: 1 },
+        { settingId: '2', settingName: '設定2', probability: 0.25, likelihood: 1 },
+        { settingId: '6', settingName: '設定6', probability: 0.45, likelihood: 1 },
+      ];
+      const result = generateSettingSummary(results);
+      expect(result.label).toBe('低設定寄り');
+      expect(result.color).toBe('#FF9800');
+    });
   });
 });

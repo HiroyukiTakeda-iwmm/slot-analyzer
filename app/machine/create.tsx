@@ -18,7 +18,6 @@ import {
   Divider,
   Portal,
   Dialog,
-  Switch,
 } from 'react-native-paper';
 import { router } from 'expo-router';
 import QRCode from 'react-native-qrcode-svg';

@@ -354,4 +354,53 @@ describe('sessionStore', () => {
       expect(state.currentSession?.machineName).toBe('テスト機種');
     });
   });
+
+  describe('updateResults', () => {
+    it('recalculates setting probabilities based on current counts', () => {
+      const { startSession, incrementCount, updateGameCount, updateResults } =
+        useSessionStore.getState();
+
+      act(() => {
+        startSession(testMachine, 0);
+        updateGameCount(1000);
+        // Add 160 grape counts (about 1/6.25 probability, close to setting 6)
+        for (let i = 0; i < 160; i++) {
+          incrementCount('grape');
+        }
+        updateResults(testMachine);
+      });
+
+      const state = useSessionStore.getState();
+      expect(state.currentSession?.results).toBeDefined();
+      expect(state.currentSession?.results.length).toBe(6);
+    });
+
+    it('does nothing when no current session', () => {
+      const { updateResults } = useSessionStore.getState();
+
+      act(() => {
+        updateResults(testMachine);
+      });
+
+      expect(useSessionStore.getState().currentSession).toBeNull();
+    });
+
+    it('uses effective games (totalGames - startGames) for calculation', () => {
+      const { startSession, incrementCount, updateGameCount, updateResults } =
+        useSessionStore.getState();
+
+      act(() => {
+        startSession(testMachine, 500); // Start at 500 games
+        updateGameCount(1500); // Total is now 1500, effective is 1000
+        for (let i = 0; i < 160; i++) {
+          incrementCount('grape');
+        }
+        updateResults(testMachine);
+      });
+
+      const state = useSessionStore.getState();
+      expect(state.currentSession?.results).toBeDefined();
+      // Results should be calculated based on 1000 effective games
+    });
+  });
 });

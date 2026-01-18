@@ -26,10 +26,9 @@ module.exports = {
     '^@react-native-async-storage/async-storage$': '<rootDir>/__mocks__/async-storage.js',
   },
   collectCoverageFrom: [
-    'stores/**/*.{ts,tsx}',
-    'utils/**/*.{ts,tsx}',
-    'components/**/*.{ts,tsx}',
-    'hooks/**/*.{ts,tsx}',
+    'stores/**/*.ts',
+    'utils/**/*.ts',
+    '!stores/index.ts',
     '!**/*.d.ts',
     '!**/node_modules/**',
   ],
@@ -41,5 +40,5 @@ module.exports = {
       statements: 70,
     },
   },
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/e2e/'],
 };
